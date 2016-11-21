@@ -1,7 +1,8 @@
 ;(function (app) { 'use strict';
 
 app.ui = app.ui || {};
-var selectedClass = 'attrs__item--selected',
+var itemClass = 'attrs__item',
+	selectedItemClass = itemClass + '--selected',
 	p;
 
 (app.ui.Attrs = function(el) {
@@ -14,7 +15,7 @@ p._init = function(){
 		attr;
 	for (var i=0, len=app.cfg.geneAttrs.length; i<len; i++) {
 		attr = app.cfg.geneAttrs[i];
-		domstr += '<span class="attrs__item" \
+		domstr += '<span class="'+itemClass+'" \
 					data-attr="'+i+'" \
 					title="'+attr.name+'" \
 					style="background-color:'+attr.color+';" \
@@ -26,9 +27,12 @@ p._init = function(){
 };
 
 p._clickHandler = function(e){
-	e.target.classList.toggle(selectedClass);
+	if(!e.target.classList.contains(itemClass)) {
+		return;
+	}
+	e.target.classList.toggle(selectedItemClass);
 	this._selectedAttrs.length = 0;
-	[].slice.call(this._el.querySelectorAll('.'+selectedClass)).forEach(function(node) {
+	[].slice.call(this._el.querySelectorAll('.'+selectedItemClass)).forEach(function(node) {
 		var idx = parseInt(node.getAttribute('data-attr'), 10);
 		this._selectedAttrs.push(app.cfg.geneAttrs[idx].name);
 	}, this);

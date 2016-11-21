@@ -9,14 +9,13 @@ var PI2 = 2 * Math.PI,
 	},
 	p;
 
-app.lib.gene.Killer = {
-	init: function(attrs){
-		attrs = app.util.extend({}, defaults, attrs);
-		this.init.parent().call(this, attrs);
-	},
-	frame: function() {
-		this.frame.parent().call(this);
-	}
+app.lib.gene.Killer = function(gene) {
+	app.util.extend(gene, {
+		killerFrame: function() {
+		}
+	});
+	gene._baseAttrs = app.util.extend({}, defaults, gene._baseAttrs);
+	gene.on(app.cfg.event.FRAME, gene.killerFrame);
 }
 
 }(window.app || (window.app = {})));

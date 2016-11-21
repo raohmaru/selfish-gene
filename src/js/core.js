@@ -27,9 +27,9 @@ function init() {
 
 function clickHandler(e) {
 	var gene = app.lib.GeneFactory.create({
-		x: e.clientX,
-		y: e.clientY
-	}, uiAttrs.getSelectedAttrs());
+			x: e.clientX,
+			y: e.clientY
+		}, ['Movable'].concat(uiAttrs.getSelectedAttrs()));
 	addGene(gene);
 }
 
