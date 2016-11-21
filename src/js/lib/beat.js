@@ -7,47 +7,47 @@ var defaults = {
 	p;
 
 (app.lib.Beat = function(options) {
-	this.options = app.util.extend({}, defaults, options);
-	this.init();
+	this._options = app.util.extend({}, defaults, options);
+	this._init();
 }).prototype = p = new Object();
 
-p.init = function() {
-	this.frameCount = 0;
-	this.cbs = [];
+p._init = function() {
+	this._frameCount = 0;
+	this._cbs = [];
 };
 
 p.start = function(fps) {
-	this.fps = fps;
-    this.fpsInterval = 1000 / fps;
-    this.then = window.performance.now();
-    this.startTime = this.then;
-    this.frame();
+	this._fps = fps;
+    this._fpsInterval = 1000 / fps;
+    this._then = window.performance.now();
+    this._startTime = this.then;
+    this._frame();
 };
 
-p.frame = function(currentTime) {
-    window.requestAnimationFrame(this.frame.bind(this));
+p._frame = function(currentTime) {
+    window.requestAnimationFrame(this._frame.bind(this));
     // calc elapsed time since last loop
-    var elapsed = currentTime - this.then;
+    var elapsed = currentTime - this._then;
     // if enough time has elapsed, draw the next frame
-    if (elapsed > this.fpsInterval) {
+    if (elapsed > this._fpsInterval) {
 		var func;
         // Get ready for next frame by setting then=currentTime, but...
         // Also, adjust for fpsInterval not being multiple of 16.67
-        this.then = currentTime - (elapsed % this.fpsInterval);
-        for(var i=0, len=this.cbs.length; i<len; i++) {
-			func = this.cbs[i];
+        this._then = currentTime - (elapsed % this._fpsInterval);
+        for(var i=0, len=this._cbs.length; i<len; i++) {
+			func = this._cbs[i];
 			func.call(func);
 		}
-		if(this.options.debug) {
-			this.frameCount++;
-			this.currentFps = 1000 / (currentTime-this.prevTime);
-			this.prevTime = currentTime;			
+		if(this._options.debug) {
+			this._frameCount++;
+			this.currentFps = 1000 / (currentTime-this._prevTime);
+			this._prevTime = currentTime;			
 		}
     }
 };
 
 p.onBeat = function(func) {
-    this.cbs.push(func);
+    this._cbs.push(func);
 	return this;
 };
 

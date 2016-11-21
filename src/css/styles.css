@@ -31,3 +31,27 @@ a:hover, a:focus {
 	padding: 0.5em;
 	font-size: 0.8em;
 }
+.attrs {
+	position: absolute;
+	top: 0;
+	right: 0;
+	padding: 0.5em;
+}
+.attrs__item {
+	display: block;
+	width: 20px;
+	height: 20px;
+	text-align: center;
+	cursor: pointer;
+	opacity: .5;
+	transition: opacity .3s linear;
+	border-radius: 50%;
+}
+.attrs__item:hover {
+	opacity: 1;
+}
+.attrs__item--selected:after {
+	content: '+';
+	font-weight: 700;
+	color: #fff;
+}

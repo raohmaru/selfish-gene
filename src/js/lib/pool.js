@@ -3,29 +3,28 @@
 app.lib = app.lib || {};
 var p;
 
-(app.lib.GenePool = function() {
-	this.init();
+(app.lib.Pool = function() {
+	this._init();
 }).prototype = p = new Object();
 
-p.init = function(){
-	this.genes = [];
+p._init = function(){
+	this._array = [];
 };
 
-p.add = function(x, y){
-	this.genes.push( new app.lib.Gene(x, y) );
-	app.core.trigger('geneAdded');
+p.add = function(item){
+	this._array.push( item );
 };
 
 p.map = function(func){
-	var len = this.genes.length;
+	var len = this._array.length;
 	for(var i=0; i<len; i++) {
-		func(this.genes[i]);
+		func(this._array[i]);
 	}
 };
 
 Object.defineProperty(p, 'length', {
 	get: function() {
-		return this.genes.length;
+		return this._array.length;
 	}
 });
 
