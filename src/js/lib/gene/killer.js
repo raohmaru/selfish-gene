@@ -15,7 +15,7 @@ app.lib.gene.Killer = function(gene) {
 	gene.on(app.cfg.event.FRAME, frame.bind(gene));
 }
 
-var frame = function() {
+var frame = function(e) {
 	if(app.core.runTime % this._baseAttrs.updateKillEvery === 0) {
 		var genes,
 			gene,
@@ -42,7 +42,7 @@ var frame = function() {
 		}
 	}
 	if(this._target) {
-		app.core.renderer.drawLine(this.x, this.y, this._target.x, this._target.y, '#FF0000');
+		app.core.renderer.get().drawLine(this.x, this.y, this._target.x, this._target.y, '#FF0000');
 	}
 };
 

@@ -1,14 +1,12 @@
 ;(function (app) { 'use strict';
 
 app.core = app.core || {};
-var	renderer,
-	uiStats,
+var	uiStats,
 	uiAttrs;
 
 app.core.start = function(canvas, ctx) {
 	app.util.sgn(app.core);
-	app.lib.rendererFactory.init(ctx);
-	app.core.renderer = app.lib.rendererFactory.create(canvas);
+	app.core.renderer = new app.lib.Renderer(ctx, canvas);
 	app.core.spriteMgr = new app.lib.SpriteMgr();
 	app.core.beatMachine = new app.lib.Beat({debug:app.cfg.debug});
 	app.core.atlas = new app.lib.Atlas({
@@ -50,11 +48,12 @@ function frame() {
 	app.core.trigger(app.cfg.event.PREPARE_FRAME);
 	app.core.spriteMgr.getAll().walk(function(sprite){
 		if(sprite.x > 0 && sprite.y > 0 && sprite.x < w && sprite.y < h) {
-			app.core.renderer.drawSprite(sprite);
+			app.core.renderer.get().drawSprite(sprite);
 			app.core.trigger(app.cfg.event.SPRITE_RENDER, sprite);
 		}
 		sprite.frame();
 	});
+	app.core.renderer.update();
 	app.core.trigger(app.cfg.event.FRAME);
 }
 
@@ -63,7 +62,7 @@ function resizeWorld() {
 	app.core.trigger(app.cfg.event.WORLD_RESIZE, window.innerWidth, window.innerHeight);
 }
 
-function cloneGene(gene) {
+function cloneGene(e, gene) {
 	var clone = app.lib.geneFactory.clone(gene);
 	app.core.spriteMgr.add(clone);
 }

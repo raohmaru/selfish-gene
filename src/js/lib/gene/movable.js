@@ -45,7 +45,7 @@ var move = function(){
 	this.x += this.angleCos * this.speed;
 	this.y += this.angleSin * this.speed;
 };
-var frame = function() {
+var frame = function(e) {
 	if(this.restFor !== undefined) {
 		if(this.restFor-- > 0) {
 			return;

@@ -4,7 +4,7 @@ app.lib = app.lib || {};
 var defaults = {
 		width: 4,
 		height: 4,
-		cloneEvery: 960,
+		cloneEvery: 120,
 		hp: 100,
 		collisionShape: 'circle'
 	},

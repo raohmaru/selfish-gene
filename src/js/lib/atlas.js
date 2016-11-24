@@ -26,17 +26,17 @@ p.init = function(){
 	}
 };
 
-p._reset = function(){
+p._reset = function(e){
 	if(app.core.runTime % this._options.updateEvery === 0) {
 		this._atlas.length = 0;
 	}
 };
 
-p._onSpriteAdded = function(sprite){;
-	this._onSpriteUpdate(sprite, true);
+p._onSpriteAdded = function(e, sprite){;
+	this._onSpriteUpdate(null, sprite, true);
 };
 
-p._onSpriteUpdate = function(sprite, force){;
+p._onSpriteUpdate = function(e, sprite, force){;
 	if(force || app.core.runTime % this._options.updateEvery === 0) {
 		var sector = this.getSectorAt(sprite.x, sprite.y);
 		if(sector) {
@@ -51,7 +51,7 @@ p._onSpriteUpdate = function(sprite, force){;
 	}
 };
 
-p._worldResize = function(w, h) {
+p._worldResize = function(e, w, h) {
 	this._worldWidth = w;
 	this._worldHeight = h;
 	this._hSectors = Math.round(w / this._options.sectorSize);
@@ -74,8 +74,8 @@ p._worldResize = function(w, h) {
 	}
 };
 
-p._frame = function() {
-	app.core.renderer.drawImage(this._view.getView(), 0, 0);
+p._frame = function(e) {
+	app.core.renderer.get().drawImage(this._view.getView(), 0, 0);
 };
 
 p.getSectorAt = function(x, y, restrictToWorld) {

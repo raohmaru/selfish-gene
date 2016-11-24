@@ -27,7 +27,7 @@ app.lib.gene.Ally = function(gene) {
 	gene._baseAttrs.allyMaxTensionSqr = app.util.sqr(gene._baseAttrs.allyMaxTension);
 }
 
-var frame = function() {
+var frame = function(e) {
 	var genes,
 		gene,
 		dte,
@@ -73,7 +73,7 @@ var frame = function() {
 	if(this._allies.length) {
 		for(i=0, len=this._allies.length; i<len; i++) {
 			gene = this._allies[i];
-			app.core.renderer.drawLine(this.x, this.y, gene.x, gene.y, this._lineColors[i]);
+			app.core.renderer.get().drawLine(this.x, this.y, gene.x, gene.y, this._lineColors[i]);
 		}
 	}
 };

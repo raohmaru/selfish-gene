@@ -31,10 +31,10 @@ app.util.sgn = function(obj) {
 				len = funcs.length,
 				// https://techblog.dorogin.com/javascript-performance-loss-on-incorrect-arguments-using-bd644f5c3ee1
 				// args = [].slice.call(arguments, 1),
-				args = app.util.argsToArray.call(null, arguments, 1),
+				// args = app.util.argsToArray.call(null, arguments, 1),
 				i = 0;
 			for(i; i<len; i++) {
-				funcs[i].apply(this, args);
+				funcs[i].apply(this, arguments);
 			}
 		}
 		return this;
