@@ -16,13 +16,13 @@ var defaults = {
 p.init = function(){
 	this._atlas = [];
 	app.core
-		.on(app.cfg.event.WORLD_RESIZE,  this._worldResize.bind(this))
-		.on(app.cfg.event.PREPARE_FRAME, this._reset.bind(this))
-		.on(app.cfg.event.SPRITE_ADDED,  this._onSpriteAdded.bind(this))
-		.on(app.cfg.event.SPRITE_RENDER, this._onSpriteUpdate.bind(this));
+		.on(app.cfg.event.WORLD_RESIZE,  this._worldResize,    this)
+		.on(app.cfg.event.PREPARE_FRAME, this._reset,          this)
+		.on(app.cfg.event.SPRITE_ADDED,  this._onSpriteAdded,  this)
+		.on(app.cfg.event.SPRITE_RENDER, this._onSpriteUpdate, this);
 	if(this._options.debug) {
 		this._view = app.lib.rendererFactory.create();
-		app.core.on(app.cfg.event.PREPARE_FRAME, this._frame.bind(this));
+		app.core.on(app.cfg.event.PREPARE_FRAME, this._frame, this);
 	}
 };
 

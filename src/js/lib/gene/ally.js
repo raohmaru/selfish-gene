@@ -20,9 +20,9 @@ app.lib.gene.Ally = function(gene) {
 		_allies:     [],
 		_lineColors: []
 	});
-	gene.on(app.cfg.event.FRAME, frame.bind(gene))
-		.on(app.cfg.event.SPRITE_DESTROY, destroy.bind(gene));
-	app.core.on(app.cfg.event.SPRITE_DESTROY, onSpriteDestroyed.bind(gene));
+	gene.on(app.cfg.event.FRAME, frame)
+		.on(app.cfg.event.SPRITE_DESTROY, destroy);
+	app.core.on(app.cfg.event.SPRITE_DESTROY, onSpriteDestroyed, gene);
 	// because of the fast 2D distance
 	gene._baseAttrs.allyDistanceSqr   = app.util.sqr(gene._baseAttrs.allyDistance);
 	gene._baseAttrs.allyTensionSqr    = app.util.sqr(gene._baseAttrs.allyTension);

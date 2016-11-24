@@ -5,7 +5,10 @@ app.util = app.util || {};
 app.util.sgn = function(obj) {
 	var events = {};
 	
-	obj.on = function(eventName, callback) {
+	obj.on = function(eventName, callback, context) {
+		if(context) {
+			callback = [callback, context];
+		}
 		if(!events[eventName]) {
 			events[eventName] = [callback];
 		}
@@ -18,9 +21,19 @@ app.util.sgn = function(obj) {
 	obj.off = function(eventName, callback) {
 		if(events[eventName]) {
 			if(callback) {
-				var idx = events[eventName].indexOf(callback);
-				if(idx > -1) {
-					events[eventName].splice(idx, 1);
+				var funcs = events[eventName],
+					func;
+				for(var i=0, len=funcs.length; i<len; i++) {
+					func = funcs[i];
+					if(func instanceof Array) {
+						func = func[0];
+					}
+					if(func === callback) {
+						break;
+					}
+				}
+				if(i < len) {
+					events[eventName].splice(i, 1);
 				}
 			} else {
 				delete events[eventName];
@@ -37,13 +50,19 @@ app.util.sgn = function(obj) {
 	obj.trigger = function(eventName) {
 		if(events[eventName]) {
 			var funcs = events[eventName],
-				len = funcs.length,
 				// https://techblog.dorogin.com/javascript-performance-loss-on-incorrect-arguments-using-bd644f5c3ee1
 				// args = [].slice.call(arguments, 1),
 				// args = app.util.argsToArray.call(null, arguments, 1),
-				i = 0;
-			for(i; i<len; i++) {
-				funcs[i].apply(this, arguments);
+				func,
+				ctx;
+			for(var i=0, len=funcs.length; i<len; i++) {
+				func = funcs[i];
+				ctx = this;
+				if(func instanceof Array) {
+					ctx = func[1];
+					func = func[0];
+				}
+				func.apply(ctx, arguments);
 			}
 		}
 		return this;

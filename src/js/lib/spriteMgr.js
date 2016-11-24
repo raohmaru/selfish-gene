@@ -9,7 +9,7 @@ var p;
 
 p._init = function(){
 	this._pool = new app.lib.Pool();
-	app.core.on(app.cfg.event.SPRITE_DESTROY, this._onSpriteDestroyed.bind(this));
+	app.core.on(app.cfg.event.SPRITE_DESTROY, this._onSpriteDestroyed, this);
 };
 
 p._onSpriteDestroyed = function(e, sprite) {

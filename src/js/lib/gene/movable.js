@@ -24,7 +24,7 @@ app.lib.gene.Movable = function(gene) {
 	});
 	gene.changeAngle(Math.random() * PI2);
 	gene.changeSpeed();
-	gene.on(app.cfg.event.FRAME, frame.bind(gene));
+	gene.on(app.cfg.event.FRAME, frame);
 };
 
 var changeSpeed = function(n) {
