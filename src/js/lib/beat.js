@@ -35,8 +35,7 @@ p._frame = function(currentTime) {
         // Also, adjust for fpsInterval not being multiple of 16.67
         this._then = currentTime - (elapsed % this._fpsInterval);
         for(var i=0, len=this._cbs.length; i<len; i++) {
-			func = this._cbs[i];
-			func.call(func);
+			this._cbs[i]();
 		}
 		if(this._options.debug) {
 			this._frameCount++;

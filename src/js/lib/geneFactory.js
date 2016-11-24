@@ -1,16 +1,18 @@
 ;(function (app) { 'use strict';
 
 app.lib = app.lib || {};
+var geneCount = 0;
 
-app.lib.GeneFactory = {
+app.lib.geneFactory = {
 	create: function (attrs, traits) {
 		var gene = new app.lib.Gene(attrs);
+		gene.id = geneCount++;
 		for (var i=0, len=traits.length; i<len; i++) {
 			if(app.lib.gene[traits[i]]) {
 				gene.addTrait(traits[i], app.lib.gene[traits[i]]);
 			}
 		}
-		gene.init(attrs);
+		gene.init();
 		return gene;
 	},
 

@@ -3,7 +3,7 @@
 document.addEventListener('DOMContentLoaded', function(){
 	var canvas = document.getElementById('maincanvas');
 	if(canvas.getContext){
-		app.core.start(canvas);
+		app.core.start(canvas, '2D');
 	} else {
 		// canvas-unsupported code here
 	}

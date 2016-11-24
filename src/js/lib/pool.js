@@ -12,14 +12,19 @@ p._init = function(){
 };
 
 p.add = function(item){
-	this._array.push( item );
+	this._array.push(item);
 };
 
-p.map = function(func){
-	var len = this._array.length;
-	for(var i=0; i<len; i++) {
-		func(this._array[i]);
-	}
+p.addAt = function(item, idx){
+	this._array[idx] = item;
+};
+
+p.getAt = function(idx){
+	return this._array[idx];
+};
+
+p.walk = function(func){
+	this._array.forEach(func);
 };
 
 Object.defineProperty(p, 'length', {

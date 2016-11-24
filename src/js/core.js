@@ -1,15 +1,22 @@
 ;(function (app) { 'use strict';
 
 app.core = app.core || {};
-var uiStats,
+var	renderer,
+	uiStats,
 	uiAttrs;
 
-app.core.start = function(canvas) {
+app.core.start = function(canvas, ctx) {
 	app.util.sgn(app.core);
-	app.core.renderer = new app.lib.CanvasRenderer(canvas);
-	app.core.sharedRenderer = new app.lib.SharedRenderer(app.lib.CanvasRenderer);
-	app.core.genePool = new app.lib.Pool();
+	app.lib.rendererFactory.init(ctx);
+	app.core.renderer = app.lib.rendererFactory.create(canvas);
+	app.core.spriteMgr = new app.lib.SpriteMgr();
 	app.core.beatMachine = new app.lib.Beat({debug:app.cfg.debug});
+	app.core.atlas = new app.lib.Atlas({
+		world: canvas,
+		sectorSize: app.cfg.atlasSectorSize,
+		updateEvery: app.cfg.atlasUpdate,
+		debug: app.cfg.debug
+	});
 	uiStats = new app.ui.Stats(document.getElementById('stats'));
 	uiAttrs = new app.ui.Attrs(document.getElementById('attrs'));
 	init();
@@ -17,49 +24,48 @@ app.core.start = function(canvas) {
 
 function init() {
 	app.core.renderer.getView().addEventListener('click', clickHandler, false);
-	window.addEventListener('resize', resizeCanvas, false);	
-	resizeCanvas();
+	window.addEventListener('resize', resizeWorld, false);
+	resizeWorld();
+	app.core.runTime = 0;
 	app.core.beatMachine
 		.onBeat(frame)
 		.start(app.cfg.fps);
-	app.core.on(app.cfg.event.GENE_CLONE, cloneGene);
+	app.core.on(app.cfg.event.SPRITE_CLONE, cloneGene);
 }
 
 function clickHandler(e) {
-	var gene = app.lib.GeneFactory.create({
+	var gene = app.lib.geneFactory.create({
 			x: e.clientX,
 			y: e.clientY
-		}, ['Movable'].concat(uiAttrs.getSelectedAttrs()));
-	addGene(gene);
+		}, ['Movable', 'Solid'].concat(uiAttrs.getSelectedAttrs()));
+	app.core.spriteMgr.add(gene);
 }
 
 function frame() {
-	var view = app.core.renderer.getView(),
-		w = view.width,
-		h = view.height;
+	var world = app.core.renderer.getView(),
+		w = world.width,
+		h = world.height;
+	app.core.runTime++;
 	app.core.renderer.clear(app.cfg.canvasColor);
-	app.core.genePool.map(function(gene){
-		if(gene.x > 0 && gene.y > 0 && gene.x < w && gene.y < h) {
-			app.core.renderer.drawSprite(gene);
+	app.core.trigger(app.cfg.event.PREPARE_FRAME);
+	app.core.spriteMgr.getAll().walk(function(sprite){
+		if(sprite.x > 0 && sprite.y > 0 && sprite.x < w && sprite.y < h) {
+			app.core.renderer.drawSprite(sprite);
+			app.core.trigger(app.cfg.event.SPRITE_RENDER, sprite);
 		}
-		gene.frame();
+		sprite.frame();
 	});
 	app.core.trigger(app.cfg.event.FRAME);
 }
 
-function resizeCanvas() {
+function resizeWorld() {
 	app.core.renderer.resize(window.innerWidth, window.innerHeight);
-}
-
-function addGene(gene) {
-	app.core.genePool.add(gene);
-	app.core.trigger(app.cfg.event.GENE_ADDED);
-	// console.log(gene);
+	app.core.trigger(app.cfg.event.WORLD_RESIZE, window.innerWidth, window.innerHeight);
 }
 
 function cloneGene(gene) {
-	var clone = app.lib.GeneFactory.clone(gene);
-	addGene(clone);
+	var clone = app.lib.geneFactory.clone(gene);
+	app.core.spriteMgr.add(clone);
 }
 
 }(window.app || (window.app = {})));

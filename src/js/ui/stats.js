@@ -12,12 +12,12 @@ p._init = function(){
 	this._$population = this._el.querySelector('.stats__population');
 	this._$fps = this._el.querySelector('.stats__fps');
 	app.core
-		.on(app.cfg.event.GENE_ADDED, this._geneAdded.bind(this))
+		.on(app.cfg.event.SPRITE_ADDED, this._geneAdded.bind(this))
 		.on(app.cfg.event.FRAME, this._onFrame.bind(this));
 };
 
 p._geneAdded = function(){
-	this._$population.textContent = app.core.genePool.length;
+	this._$population.textContent = app.core.spriteMgr.getSize();
 };
 
 p._onFrame = function(){

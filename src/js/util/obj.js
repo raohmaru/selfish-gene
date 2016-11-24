@@ -19,4 +19,9 @@ app.util.extend = function(out) {
 	return out;
 };
 
+app.util.callNew = function(F, args) {
+	args.unshift(F);
+	return new (Function.prototype.bind.apply(F, args));
+};
+
 }(window.app || (window.app = {})));

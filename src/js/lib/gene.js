@@ -4,9 +4,10 @@ app.lib = app.lib || {};
 var defaults = {
 		width: 4,
 		height: 4,
-		cloneEvery: 120
+		cloneEvery: 960,
+		hp: 100,
+		collisionShape: 'circle'
 	},
-	view,
 	p;
 
 (app.lib.Gene = function(attrs) {
@@ -15,13 +16,14 @@ var defaults = {
 	this._traits = [];
 	this.x = this._baseAttrs.x;
 	this.y = this._baseAttrs.y;
+	this.hp = this._baseAttrs.hp;
 	this.width = this._baseAttrs.width;
 	this.height = this._baseAttrs.height;
 	app.util.sgn(this);
 }).prototype = p = new Object();
 
 p.init = function(){
-	this._view = app.core.sharedRenderer.get(this.width, this.height, this._baseAttrs.color);
+	this._view = app.lib.rendererFactory.createShared(this.width, this.height, this._baseAttrs.color);
 	if(this._view.isEmpty()){
 		this._view.drawRect(0, 0, this.width, this.height, this._baseAttrs.color);
 	}
@@ -30,7 +32,7 @@ p.init = function(){
 p.frame = function(){
 	this.age++;
 	if(this.age % this._baseAttrs.cloneEvery === 0) {
-		app.core.trigger(app.cfg.event.GENE_CLONE, this);
+		app.core.trigger(app.cfg.event.SPRITE_CLONE, this);
 	}
 	this.trigger(app.cfg.event.FRAME);
 };
@@ -48,6 +50,23 @@ p.addTrait = function(name, func) {
 		func(this);
 		this._traits.push(name)
 	}
+};
+
+p.hasTrait = function(name) {
+	return this._traits.indexOf(name) > -1;
+};
+
+p.hit = function(hitPoints) {
+	this.hp += hitPoints;
+	if(this.hp <= 0) {
+		this.destroy();
+	}
+};
+
+p.destroy = function() {
+	app.core.trigger(app.cfg.event.SPRITE_DESTROYED, this);
+	this.trigger(app.cfg.event.SPRITE_DESTROYED, this);
+	this.destroyed = true;
 };
 
 }(window.app || (window.app = {})));

@@ -31,7 +31,12 @@ p._clickHandler = function(e){
 		return;
 	}
 	e.target.classList.toggle(selectedItemClass);
-	this._selectedAttrs.length = 0;
+	[].slice.call(this._el.querySelectorAll('.'+selectedItemClass)).forEach(function(node) {
+		if(node !== e.target) {
+			node.classList.remove(selectedItemClass);
+		}
+	});
+	this._selectedAttrs = [];
 	[].slice.call(this._el.querySelectorAll('.'+selectedItemClass)).forEach(function(node) {
 		var idx = parseInt(node.getAttribute('data-attr'), 10);
 		this._selectedAttrs.push(app.cfg.geneAttrs[idx].name);

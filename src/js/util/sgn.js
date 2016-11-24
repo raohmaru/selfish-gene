@@ -29,7 +29,9 @@ app.util.sgn = function(obj) {
 		if(events[eventName]) {
 			var funcs = events[eventName],
 				len = funcs.length,
-				args = [].slice.call(arguments, 1),
+				// https://techblog.dorogin.com/javascript-performance-loss-on-incorrect-arguments-using-bd644f5c3ee1
+				// args = [].slice.call(arguments, 1),
+				args = app.util.argsToArray.call(null, arguments, 1),
 				i = 0;
 			for(i; i<len; i++) {
 				funcs[i].apply(this, args);
@@ -38,5 +40,14 @@ app.util.sgn = function(obj) {
 		return this;
 	};
 };
+
+app.util.argsToArray = function(args, startIdx) {
+	startIdx = startIdx || 0;
+	var sources = new Array(args.length - startIdx);
+	for (var _i = startIdx; _i < args.length; _i++) {
+		sources[_i - startIdx] = args[_i];
+	}
+	return sources;
+}
 
 }(window.app || (window.app = {})));

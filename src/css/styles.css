@@ -17,7 +17,7 @@ a {
 a:hover, a:focus {
 	text-decoration: underline;
 }
-.board {
+.world {
 	position: fixed;
 	display: block;
 	width: 100%;

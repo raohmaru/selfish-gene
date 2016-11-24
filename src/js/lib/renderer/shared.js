@@ -16,8 +16,7 @@ p.get = function(width, height, id){
 	var name = [].join.call(arguments, ''),
 		r;
 	if(!this._renList[name]) {
-		r = new this._renderer();
-		r.resize(width, height);
+		r = new this._renderer(null, width, height);
 		this._renList[name] = r;
 	}
 	return this._renList[name];

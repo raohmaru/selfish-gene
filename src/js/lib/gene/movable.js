@@ -9,51 +9,62 @@ var PI2 = 2 * Math.PI,
 		restMaxTime: 5,
 		restTopProb: .005,
 		updateMovEvery: 7  // frames
-	},
-	p;
+	};
 
 app.lib.gene.Movable = function(gene) {
 	app.util.extend(gene, {
-		changeSpeed: function () {
-			this.speed = app.util.random(this._baseAttrs.moveSpeed);
-		},
-		changeAngle: function () {
-			this.angle += app.util.random(-this.angleDelta, this.angleDelta);
-		},
-		move: function(){
-			this.x += Math.cos(this.angle) * this.speed;
-			this.y += Math.sin(this.angle) * this.speed;
-		},
-		movableFrame: function() {
-			if(this.restFor !== undefined) {
-				if(this.restFor-- > 0) {
-					return;
-				} else {
-					this.restFor = undefined;
-				}
-			}	
-			this.move();
-			if(this.age % this._baseAttrs.updateMovEvery === 0) {
-				if(app.util.randomBool(this.restProb)) {
-					this.restFor = app.util.randomInt(app.core.beatMachine.fps, app.core.beatMachine.fps*this._baseAttrs.restMaxTime);
-				}			
-				if(app.util.randomBool(this.changeAngleProb)) {
-					this.changeAngle();
-				}
-				if(app.util.randomBool(this.changeSpeedProb)) {
-					this.changeSpeed();
-				}
-			}
-		}
+		_baseAttrs:      app.util.extend({}, defaults, gene._baseAttrs),
+		angleDelta:      Math.random() * HALFPI,
+		changeAngleProb: Math.random(),
+		changeSpeedProb: Math.random(),
+		restProb:        app.util.random(0, gene._baseAttrs.restTopProb),
+		changeSpeed:     changeSpeed,
+		changeAngle:     changeAngle,
+		move:            move
 	});
-	gene._baseAttrs = app.util.extend({}, defaults, gene._baseAttrs);
-	gene.angle = Math.random() * PI2;
-	gene.angleDelta = Math.random() * HALFPI;
-	gene.changeAngleProb = Math.random();
-	gene.changeSpeedProb = Math.random();
+	gene.changeAngle(Math.random() * PI2);
 	gene.changeSpeed();
-	gene.restProb = app.util.random(0, gene._baseAttrs.restTopProb);
-	gene.on(app.cfg.event.FRAME, gene.movableFrame);
+	gene.on(app.cfg.event.FRAME, frame.bind(gene));
+};
+
+var changeSpeed = function(n) {
+	if(n === undefined) {
+		n = app.util.random(this._baseAttrs.moveSpeed)
+	}
+	this.speed = n;
+};
+var changeAngle = function(n) {
+	if(n === undefined) {
+		n = this.angle + app.util.random(-this.angleDelta, this.angleDelta);
+	}
+	this.angle = n;
+	this.angleCos = Math.cos(n);
+	this.angleSin = Math.sin(n);
+};
+var move = function(){
+	this.x += this.angleCos * this.speed;
+	this.y += this.angleSin * this.speed;
+};
+var frame = function() {
+	if(this.restFor !== undefined) {
+		if(this.restFor-- > 0) {
+			return;
+		} else {
+			this.restFor = undefined;
+		}
+	}	
+	this.move();
+	if(app.core.runTime % this._baseAttrs.updateMovEvery === 0) {
+		if(!this._chasing && app.util.randomBool(this.restProb)) {
+			this.restFor = app.util.randomInt(app.core.beatMachine.fps, app.core.beatMachine.fps*this._baseAttrs.restMaxTime);
+		}			
+		if(!this._chasing && app.util.randomBool(this.changeAngleProb)) {
+			this.changeAngle();
+		}
+		if(app.util.randomBool(this.changeSpeedProb)) {
+			this.changeSpeed();
+		}
+	}
 };
 
 }(window.app || (window.app = {})));
