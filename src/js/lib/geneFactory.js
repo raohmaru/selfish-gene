@@ -6,7 +6,7 @@ var geneCount = 0;
 app.lib.geneFactory = {
 	create: function (attrs, traits) {
 		var gene = new app.lib.Gene(attrs);
-		gene.id = geneCount++;
+		gene.id = 'gene' + geneCount++;
 		for (var i=0, len=traits.length; i<len; i++) {
 			if(app.lib.gene[traits[i]]) {
 				gene.addTrait(traits[i], app.lib.gene[traits[i]]);

@@ -20,8 +20,10 @@ app.lib.gene.Ally = function(gene) {
 		_allies:     [],
 		_lineColors: []
 	});
-	gene.on(app.cfg.event.FRAME, frame.bind(gene));
-	// because of the fast 2D disntance
+	gene.on(app.cfg.event.FRAME, frame.bind(gene))
+		.on(app.cfg.event.SPRITE_DESTROY, destroy.bind(gene));
+	app.core.on(app.cfg.event.SPRITE_DESTROY, onSpriteDestroyed.bind(gene));
+	// because of the fast 2D distance
 	gene._baseAttrs.allyDistanceSqr   = app.util.sqr(gene._baseAttrs.allyDistance);
 	gene._baseAttrs.allyTensionSqr    = app.util.sqr(gene._baseAttrs.allyTension);
 	gene._baseAttrs.allyMaxTensionSqr = app.util.sqr(gene._baseAttrs.allyMaxTension);
@@ -37,8 +39,8 @@ var frame = function(e) {
 		if(this._allies.length < this._baseAttrs.allyMax) {
 			genes = app.core.atlas.getSpritesAt(this.x, this.y, this._baseAttrs.allyDistance);
 			for (i=0, len=genes.length; i<len; i++) {
-				gene = app.core.spriteMgr.getAt(genes[i]);
-				if(genes[i] === this.id || gene.getTraits().length > 2 || this._allies.indexOf(gene) !== -1) {
+				gene = app.core.spriteMgr.get(genes[i]);
+				if(!gene || genes[i] === this.id || gene.getTraits().length > 2 || this._allies.indexOf(gene) !== -1) {
 					continue;
 				}
 				dte = app.util.dte(this.x, this.y, gene.x, gene.y);
@@ -71,9 +73,24 @@ var frame = function(e) {
 		}
 	}
 	if(this._allies.length) {
+		var r = app.core.renderer.get();
 		for(i=0, len=this._allies.length; i<len; i++) {
 			gene = this._allies[i];
-			app.core.renderer.get().drawLine(this.x, this.y, gene.x, gene.y, this._lineColors[i]);
+			r.drawLine(this.x, this.y, gene.x, gene.y, this._lineColors[i]);
+		}
+	}
+};
+
+var destroy = function() {
+	this._allies = undefined;
+	app.core.off(app.cfg.event.SPRITE_DESTROY, onSpriteDestroyed);
+};
+
+var onSpriteDestroyed = function(e, gene) {
+	if(gene !== this) {
+		var idx = this._allies.indexOf(gene);
+		if(idx > -1) {
+			this._allies.splice(idx, 1);
 		}
 	}
 };

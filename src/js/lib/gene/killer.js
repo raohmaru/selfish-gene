@@ -11,8 +11,10 @@ var defaults = {
 
 app.lib.gene.Killer = function(gene) {
 	gene._baseAttrs = app.util.extend({}, defaults, gene._baseAttrs);
-	gene._baseAttrs.attackDistanceSqr = app.util.sqr(gene._baseAttrs.attackDistance);  // because of the fast 2D disntance
-	gene.on(app.cfg.event.FRAME, frame.bind(gene));
+	gene._baseAttrs.attackDistanceSqr = app.util.sqr(gene._baseAttrs.attackDistance);  // because of the fast 2D distance
+	gene.on(app.cfg.event.FRAME, frame.bind(gene))
+		.on(app.cfg.event.SPRITE_DESTROY, destroy.bind(gene));
+	app.core.on(app.cfg.event.SPRITE_DESTROY, onSpriteDestroyed.bind(gene));
 }
 
 var frame = function(e) {
@@ -23,8 +25,8 @@ var frame = function(e) {
 		if(!this._target) {
 			genes = app.core.atlas.getSpritesAt(this.x, this.y, this._baseAttrs.attackDistance)
 			for (var i=0, len=genes.length; i<len; i++) {
-				gene = app.core.spriteMgr.getAt(genes[i]);
-				if(genes[i] === this.id || gene.hasTrait('Killer')) {
+				gene = app.core.spriteMgr.get(genes[i]);
+				if(!gene || genes[i] === this.id || gene.hasTrait('Killer')) {
 					continue;
 				}
 				dte = app.util.dte(this.x, this.y, gene.x, gene.y);
@@ -43,6 +45,18 @@ var frame = function(e) {
 	}
 	if(this._target) {
 		app.core.renderer.get().drawLine(this.x, this.y, this._target.x, this._target.y, '#FF0000');
+	}
+};
+
+var destroy = function() {
+	this._target = undefined;
+	app.core.off(app.cfg.event.SPRITE_DESTROY, onSpriteDestroyed);
+};
+
+var onSpriteDestroyed = function(e, gene) {
+	if(this._target === gene) {
+		this._target = undefined;
+		this._chasing = false;
 	}
 };
 

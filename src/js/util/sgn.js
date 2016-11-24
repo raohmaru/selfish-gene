@@ -17,10 +17,19 @@ app.util.sgn = function(obj) {
 	
 	obj.off = function(eventName, callback) {
 		if(events[eventName]) {
-			var idx = events[eventName].indexOf(callback);
-			if(idx > -1) {
-				events[eventName].splice(idx, 1);
+			if(callback) {
+				var idx = events[eventName].indexOf(callback);
+				if(idx > -1) {
+					events[eventName].splice(idx, 1);
+				}
+			} else {
+				delete events[eventName];
 			}
+		} else if(!eventName) {
+			events = null;
+			delete this.on;
+			delete this.off;
+			delete this.trigger;
 		}
 		return this;
 	};

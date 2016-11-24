@@ -46,13 +46,7 @@ function frame() {
 	app.core.runTime++;
 	app.core.renderer.clear(app.cfg.canvasColor);
 	app.core.trigger(app.cfg.event.PREPARE_FRAME);
-	app.core.spriteMgr.getAll().walk(function(sprite){
-		if(sprite.x > 0 && sprite.y > 0 && sprite.x < w && sprite.y < h) {
-			app.core.renderer.get().drawSprite(sprite);
-			app.core.trigger(app.cfg.event.SPRITE_RENDER, sprite);
-		}
-		sprite.frame();
-	});
+	app.core.renderer.drawSprites(app.core.spriteMgr.getAll(), true);
 	app.core.renderer.update();
 	app.core.trigger(app.cfg.event.FRAME);
 }

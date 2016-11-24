@@ -9,15 +9,24 @@ var p;
 
 p._init = function(){
 	this._pool = new app.lib.Pool();
+	app.core.on(app.cfg.event.SPRITE_DESTROY, this._onSpriteDestroyed.bind(this));
+};
+
+p._onSpriteDestroyed = function(e, sprite) {
+	this.remove(sprite);
 };
 
 p.add = function(sprite) {
-	this._pool.addAt(sprite, sprite.id);
+	this._pool.add(sprite, sprite.id);
 	app.core.trigger(app.cfg.event.SPRITE_ADDED, sprite);
 };
 
-p.getAt = function(idx){
-	return this._pool.getAt(idx);
+p.remove = function(sprite) {
+	this._pool.remove(sprite, sprite.id);
+};
+
+p.get = function(idx){
+	return this._pool.get(idx);
 };
 
 p.getAll = function(idx){

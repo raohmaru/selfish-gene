@@ -4,7 +4,7 @@ app.lib = app.lib || {};
 var defaults = {
 		width: 4,
 		height: 4,
-		cloneEvery: 120,
+		cloneEvery: 960,
 		hp: 100,
 		collisionShape: 'circle'
 	},
@@ -64,9 +64,13 @@ p.hit = function(hitPoints) {
 };
 
 p.destroy = function() {
-	app.core.trigger(app.cfg.event.SPRITE_DESTROYED, this);
-	this.trigger(app.cfg.event.SPRITE_DESTROYED, this);
-	this.destroyed = true;
+	if(!this.destroyed) {
+		this.trigger(app.cfg.event.SPRITE_DESTROY);
+		this.destroyed = true;
+		this._view = undefined;
+		this.off();
+		app.core.trigger(app.cfg.event.SPRITE_DESTROY, this);
+	}
 };
 
 }(window.app || (window.app = {})));
