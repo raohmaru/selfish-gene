@@ -50,7 +50,7 @@ var frame = function(e) {
 
 var destroy = function() {
 	this._target = undefined;
-	app.core.off(app.cfg.event.SPRITE_DESTROY, onSpriteDestroyed);
+	app.core.off(app.cfg.event.SPRITE_DESTROY, onSpriteDestroyed, this);
 };
 
 var onSpriteDestroyed = function(e, gene) {

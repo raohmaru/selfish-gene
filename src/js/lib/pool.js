@@ -40,6 +40,12 @@ p.get = function(idx){
 	return this._array[idx];
 };
 
+p.first = function(){
+	for (var key in this._array) {
+		return this._array[key];
+	}
+};
+
 p.forEach = function(func){
 	for (var key in this._array) {
 		func(this._array[key]);

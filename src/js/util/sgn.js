@@ -18,17 +18,20 @@ app.util.sgn = function(obj) {
 		return this;
 	};
 	
-	obj.off = function(eventName, callback) {
+	obj.off = function(eventName, callback, context) {
 		if(events[eventName]) {
 			if(callback) {
 				var funcs = events[eventName],
-					func;
+					func,
+					ctx;
 				for(var i=0, len=funcs.length; i<len; i++) {
 					func = funcs[i];
+					ctx = null;
 					if(func instanceof Array) {
+						ctx = func[1];
 						func = func[0];
 					}
-					if(func === callback) {
+					if(func === callback && (!context || context === ctx)) {
 						break;
 					}
 				}

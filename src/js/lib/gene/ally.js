@@ -4,7 +4,7 @@ app.lib = app.lib || {};
 app.lib.gene = app.lib.gene || {};
 var PI = Math.PI,
 	defaults = {
-		color: '#5EC175',
+		color: '#55AE6B',
 		allyDistance: 30,
 		allyTension: 100,
 		allyMaxTension: 125,
@@ -18,7 +18,8 @@ app.lib.gene.Ally = function(gene) {
 	app.util.extend(gene, {
 		_baseAttrs:  app.util.extend({}, defaults, gene._baseAttrs),
 		_allies:     [],
-		_lineColors: []
+		_lineColors: [],
+		_removeAlly: removeAlly
 	});
 	gene.on(app.cfg.event.FRAME, frame)
 		.on(app.cfg.event.SPRITE_DESTROY, destroy);
@@ -40,18 +41,20 @@ var frame = function(e) {
 			genes = app.core.atlas.getSpritesAt(this.x, this.y, this._baseAttrs.allyDistance);
 			for (i=0, len=genes.length; i<len; i++) {
 				gene = app.core.spriteMgr.get(genes[i]);
-				if(!gene || genes[i] === this.id || gene.getTraits().length > 2 || this._allies.indexOf(gene) !== -1) {
+				if(!gene || genes[i] === this.id || gene.hasTrait('Killer') || this._allies.indexOf(gene) > -1) {
 					continue;
 				}
 				dte = app.util.dte(this.x, this.y, gene.x, gene.y);
 				if(dte < this._baseAttrs.allyDistanceSqr) {
+					gene.resize(gene.width+1, gene.height+1);
+					gene.hit(25);
 					this._allies.push(gene);
 					break;
 				}
 			}
 		}
 		this._lineColors.length = 0;
-		for(i=0, len=this._allies.length; i<len; i++) {
+		for(i=this._allies.length-1; i>-1; i--) {
 			gene = this._allies[i];
 			if(!gene) {
 				continue;
@@ -59,9 +62,8 @@ var frame = function(e) {
 			dte = app.util.dte(this.x, this.y, gene.x, gene.y);
 			if(dte > this._baseAttrs.allyTensionSqr) {
 				if(dte > this._baseAttrs.allyMaxTensionSqr) {
-					this._allies.splice(i, 1);
+					this._removeAlly(gene, i);
 					this._lineColors.splice(i, 1);
-					i -= 1;
 				} else {
 					gene.changeAngle(this.angle);
 					this.angle += PI;
@@ -81,17 +83,32 @@ var frame = function(e) {
 	}
 };
 
+var removeAlly = function(gene, idx) {
+	if(idx != undefined) {
+		if(typeof idx !== "number") {
+			idx = this._allies.indexOf(gene);
+		}
+		if(idx > -1) {
+			this._allies.splice(idx, 1);
+		}
+	}
+	if(gene && !gene.destroyed) {
+		gene.resize(gene.width-1, gene.height-1);
+		gene.hit(-25);
+	}
+}
+
 var destroy = function() {
+	for(var i=0, len=this._allies.length; i<len; i++) {
+		this._removeAlly(this._allies[i]);
+	}
 	this._allies = undefined;
-	app.core.off(app.cfg.event.SPRITE_DESTROY, onSpriteDestroyed);
+	app.core.off(app.cfg.event.SPRITE_DESTROY, onSpriteDestroyed, this);
 };
 
 var onSpriteDestroyed = function(e, gene) {
 	if(gene !== this) {
-		var idx = this._allies.indexOf(gene);
-		if(idx > -1) {
-			this._allies.splice(idx, 1);
-		}
+		this._removeAlly(gene, true);
 	}
 };
 
