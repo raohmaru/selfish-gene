@@ -29,9 +29,9 @@ p.init = function(){
 p.frame = function(){
 	this.age++;
 	if(this.age % this._baseAttrs.cloneEvery === 0) {
-		app.core.trigger(app.cfg.event.SPRITE_CLONE, this);
+		app.core.emit(app.core.cfg.event.SPRITE_CLONE, this);
 	}
-	this.trigger(app.cfg.event.FRAME);
+	this.emit(app.core.cfg.event.FRAME);
 };
 
 p.createView = function() {
@@ -76,10 +76,10 @@ p.hit = function(hitPoints) {
 p.destroy = function() {
 	if(!this.destroyed) {
 		this.destroyed = true;
-		this.trigger(app.cfg.event.SPRITE_DESTROY);
+		this.emit(app.core.cfg.event.SPRITE_DESTROY);
 		this._view = undefined;
 		this.off();
-		app.core.trigger(app.cfg.event.SPRITE_DESTROY, this);
+		app.core.emit(app.core.cfg.event.SPRITE_DESTROY, this);
 	}
 };
 

@@ -45,12 +45,12 @@ app.util.sgn = function(obj) {
 			events = null;
 			delete this.on;
 			delete this.off;
-			delete this.trigger;
+			delete this.emit;
 		}
 		return this;
 	};
 	
-	obj.trigger = function(eventName) {
+	obj.emit = function(eventName) {
 		if(events[eventName]) {
 			var funcs = events[eventName],
 				// https://techblog.dorogin.com/javascript-performance-loss-on-incorrect-arguments-using-bd644f5c3ee1

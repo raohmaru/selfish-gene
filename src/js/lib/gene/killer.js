@@ -12,9 +12,9 @@ var defaults = {
 app.lib.gene.Killer = function(gene) {
 	gene._baseAttrs = app.util.extend({}, defaults, gene._baseAttrs);
 	gene._baseAttrs.attackDistanceSqr = app.util.sqr(gene._baseAttrs.attackDistance);  // because of the fast 2D distance
-	gene.on(app.cfg.event.FRAME, frame)
-		.on(app.cfg.event.SPRITE_DESTROY, destroy);
-	app.core.on(app.cfg.event.SPRITE_DESTROY, onSpriteDestroyed, gene);
+	gene.on(app.core.cfg.event.FRAME, frame)
+		.on(app.core.cfg.event.SPRITE_DESTROY, destroy);
+	app.core.on(app.core.cfg.event.SPRITE_DESTROY, onSpriteDestroyed, gene);
 }
 
 var frame = function(e) {
@@ -50,7 +50,7 @@ var frame = function(e) {
 
 var destroy = function() {
 	this._target = undefined;
-	app.core.off(app.cfg.event.SPRITE_DESTROY, onSpriteDestroyed, this);
+	app.core.off(app.core.cfg.event.SPRITE_DESTROY, onSpriteDestroyed, this);
 };
 
 var onSpriteDestroyed = function(e, gene) {

@@ -41,11 +41,11 @@ p.drawSprites = function(sprites, onlyVisible){
 	if(!sprites.length) {
 		return;
 	}
-	var e = app.cfg.event.SPRITE_RENDER;
+	var e = app.core.cfg.event.SPRITE_RENDER;
 	sprites.forEach(function(sprite){
 		if(!onlyVisible || (sprite.x > 0 && sprite.y > 0 && sprite.x < this._ww && sprite.y < this._wh)) {
 			this._backbuffer.drawSprite(sprite);
-			app.core.trigger(e, sprite);
+			app.core.emit(e, sprite);
 		}
 		sprite.frame();
 	}.bind(this));

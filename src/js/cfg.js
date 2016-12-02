@@ -8,6 +8,7 @@ app.cfg = {
 	atlasSectorSize:50,
 	atlasUpdate:30,
 	geneAttrs: [
+		{name:'Basic',    color:'#666666', initial: true},
 		{name:'Ally',     color:'#55AE6B'},
 		// {name:'Dodger',   color:'#49A1FF'},
 		// {name:'Defender', color:'#FABB2C'},

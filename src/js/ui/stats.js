@@ -13,9 +13,9 @@ p._init = function(){
 	this._$population = this._el.querySelector('.stats__population');
 	this._$fps = this._el.querySelector('.stats__fps');
 	app.core
-		.on(app.cfg.event.SPRITE_ADDED,   this._geneChange, this)
-		.on(app.cfg.event.SPRITE_DESTROY, this._geneChange, this)
-		.on(app.cfg.event.FRAME,          this._onFrame,    this);
+		.on(app.core.cfg.event.SPRITE_ADDED,   this._geneChange, this)
+		.on(app.core.cfg.event.SPRITE_DESTROY, this._geneChange, this)
+		.on(app.core.cfg.event.FRAME,          this._onFrame,    this);
 };
 
 p._geneChange = function(e){

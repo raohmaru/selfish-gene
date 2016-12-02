@@ -1,42 +1,29 @@
 ;(function (app) { 'use strict';
 
 app.core = app.core || {};
-var	uiStats,
-	uiAttrs;
 
-app.core.start = function(canvas, ctx) {
+app.core.init = function(canvas, ctx, cfg) {
+	app.core.cfg = cfg;
 	app.util.sgn(app.core);
 	app.core.renderer = new app.lib.Renderer(ctx, canvas);
 	app.core.spriteMgr = new app.lib.SpriteMgr();
-	app.core.beatMachine = new app.lib.Beat({debug:app.cfg.debug});
+	app.core.beatMachine = new app.lib.Beat({debug:app.core.cfg.debug});
 	app.core.atlas = new app.lib.Atlas({
 		world: canvas,
-		sectorSize: app.cfg.atlasSectorSize,
-		updateEvery: app.cfg.atlasUpdate,
-		debug: app.cfg.debug
+		sectorSize: app.core.cfg.atlasSectorSize,
+		updateEvery: app.core.cfg.atlasUpdate,
+		debug: app.core.cfg.debug
 	});
-	uiStats = new app.ui.Stats(document.getElementById('stats'));
-	uiAttrs = new app.ui.Attrs(document.getElementById('attrs'));
-	init();
+	return app.core;
 }
 
-function init() {
-	app.core.renderer.getView().addEventListener('click', clickHandler, false);
+app.core.start = function() {
 	window.addEventListener('resize', resizeWorld, false);
 	resizeWorld();
 	app.core.runTime = 0;
 	app.core.beatMachine
 		.onBeat(frame)
-		.start(app.cfg.fps);
-	app.core.on(app.cfg.event.SPRITE_CLONE, cloneGene);
-}
-
-function clickHandler(e) {
-	var gene = app.lib.geneFactory.create({
-			x: e.clientX,
-			y: e.clientY
-		}, ['Movable', 'Solid'].concat(uiAttrs.getSelectedAttrs()));
-	app.core.spriteMgr.add(gene);
+		.start(app.core.cfg.fps);
 }
 
 function frame() {
@@ -44,21 +31,16 @@ function frame() {
 		w = world.width,
 		h = world.height;
 	app.core.runTime++;
-	app.core.renderer.clear(app.cfg.canvasColor);
-	app.core.trigger(app.cfg.event.PREPARE_FRAME);
+	app.core.renderer.clear(app.core.cfg.canvasColor);
+	app.core.emit(app.core.cfg.event.PREPARE_FRAME);
 	app.core.renderer.drawSprites(app.core.spriteMgr.getAll(), true);
 	app.core.renderer.update();
-	app.core.trigger(app.cfg.event.FRAME);
+	app.core.emit(app.core.cfg.event.FRAME);
 }
 
 function resizeWorld() {
 	app.core.renderer.resize(window.innerWidth, window.innerHeight);
-	app.core.trigger(app.cfg.event.WORLD_RESIZE, window.innerWidth, window.innerHeight);
-}
-
-function cloneGene(e, gene) {
-	var clone = app.lib.geneFactory.clone(gene);
-	app.core.spriteMgr.add(clone);
+	app.core.emit(app.core.cfg.event.WORLD_RESIZE, window.innerWidth, window.innerHeight);
 }
 
 }(window.app || (window.app = {})));

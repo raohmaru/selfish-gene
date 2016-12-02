@@ -21,9 +21,9 @@ app.lib.gene.Ally = function(gene) {
 		_lineColors: [],
 		_removeAlly: removeAlly
 	});
-	gene.on(app.cfg.event.FRAME, frame)
-		.on(app.cfg.event.SPRITE_DESTROY, destroy);
-	app.core.on(app.cfg.event.SPRITE_DESTROY, onSpriteDestroyed, gene);
+	gene.on(app.core.cfg.event.FRAME, frame)
+		.on(app.core.cfg.event.SPRITE_DESTROY, destroy);
+	app.core.on(app.core.cfg.event.SPRITE_DESTROY, onSpriteDestroyed, gene);
 	// because of the fast 2D distance
 	gene._baseAttrs.allyDistanceSqr   = app.util.sqr(gene._baseAttrs.allyDistance);
 	gene._baseAttrs.allyTensionSqr    = app.util.sqr(gene._baseAttrs.allyTension);
@@ -103,7 +103,7 @@ var destroy = function() {
 		this._removeAlly(this._allies[i]);
 	}
 	this._allies = undefined;
-	app.core.off(app.cfg.event.SPRITE_DESTROY, onSpriteDestroyed, this);
+	app.core.off(app.core.cfg.event.SPRITE_DESTROY, onSpriteDestroyed, this);
 };
 
 var onSpriteDestroyed = function(e, gene) {
