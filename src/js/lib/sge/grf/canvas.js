@@ -3,7 +3,7 @@
 sge.grf = sge.grf || {};
 var p;
 
-(sge.grf.CanvasRenderer = function(canvas, width, height) {
+sge.grf.CanvasRenderer = function(canvas, width, height) {
 	if(!canvas) {
 		canvas = document.createElement("canvas");
 	}
@@ -12,7 +12,8 @@ var p;
 	if(width && height) {
 		this.resize(width, height);
 	}
-}).prototype = p = new Object();
+};
+p = sge.grf.CanvasRenderer.prototype;
 
 p._init = function(){
 	this._ctx = this._canvas.getContext('2d');
@@ -26,14 +27,18 @@ p.resize = function(width, height){
 };
 
 p.clear = function(color){
-	this._ctx.fillStyle = color;
-	this._ctx.fillRect(0, 0, this._canvas.width, this._canvas.height);
+	if(color) {		
+		this._ctx.fillStyle = color;
+		this._ctx.fillRect(0, 0, this._canvas.width, this._canvas.height);
+	} else {
+		this._ctx.clearRect(0, 0, this._canvas.width, this._canvas.height);
+	}
 	this._empty = true;
 };
 
 p.drawSprite = function(sprite){
 	this._ctx.drawImage(
-		sprite.getView(),
+		sprite.getCanvas(),
 		sprite.x - (sprite.width  >> 1) | 0,
 		sprite.y - (sprite.height >> 1) | 0);
 	this._empty = false;
@@ -82,7 +87,7 @@ p.drawPoly = function(path, color, lineWidth){
 	this._empty = false;
 };
 
-p.getView = function(){
+p.getCanvas = function(){
 	return this._canvas;
 };
 

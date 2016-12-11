@@ -65,7 +65,7 @@ sge.util.sgn = function(obj) {
 					ctx = func[1];
 					func = func[0];
 				}
-				func.apply(ctx, arguments);
+				func && func.apply(ctx, arguments);
 			}
 		}
 		return this;
@@ -75,8 +75,8 @@ sge.util.sgn = function(obj) {
 sge.util.argsToArray = function(args, startIdx) {
 	startIdx = startIdx || 0;
 	var sources = new Array(args.length - startIdx);
-	for (var _i = startIdx; _i < args.length; _i++) {
-		sources[_i - startIdx] = args[_i];
+	for (var i=startIdx, len=args.length; i<len; i++) {
+		sources[i-startIdx] = args[i];
 	}
 	return sources;
 }

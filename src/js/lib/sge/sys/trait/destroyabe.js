@@ -6,10 +6,10 @@ var defaults = {
 		hp: 100,
 	};
 
-sge.sys.trait.Destroyable = function(gene) {
-	gene._baseAttrs = sge.obj.extend({}, defaults, gene._baseAttrs);
-	sge.obj.extend(gene, {
-		hp : gene._baseAttrs.hp,
+sge.sys.trait.Destroyable = function(obj) {
+	obj._baseAttrs = sge.obj.extend({}, defaults, obj._baseAttrs);
+	sge.obj.extend(obj, {
+		hp : obj._baseAttrs.hp,
 		hit: hit
 	});
 }

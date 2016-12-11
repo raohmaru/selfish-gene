@@ -14,7 +14,7 @@ sge.rnd.random = function(min, max) {
 }
 
 sge.rnd.randomInt = function(min, max) {
-	return parseInt( Math.round( sge.rnd.random(min, max) ) );
+	return Math.round( sge.rnd.random(min, max) );
 }
 
 sge.rnd.randomBool = function(perc) {

@@ -6,11 +6,11 @@ sge.sys.trait = sge.sys.trait || {};
 var defaults = {
 		collisionShape: 'square'
 	};
-sge.sys.trait.Solid = function(gene) {
-	gene._baseAttrs = sge.obj.extend({}, defaults, gene._baseAttrs);
-	sge.obj.extend(gene, {
+sge.sys.trait.Solid = function(obj) {
+	obj._baseAttrs = sge.obj.extend({}, defaults, obj._baseAttrs);
+	sge.obj.extend(obj, {
 		collide   : collide,
-		hitBox	  : createHitArea(gene._baseAttrs.collisionShape, gene)
+		hitBox	  : createHitArea(obj._baseAttrs.collisionShape, obj)
 	});
 };
 

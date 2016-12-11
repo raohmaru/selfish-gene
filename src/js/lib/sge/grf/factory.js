@@ -5,7 +5,12 @@ var p;
 
 (sge.grf.RendererFactory = function(type) {
 	this._setContext(type);
+	this._init();
 }).prototype = p = new Object();
+
+p._init = function(){
+	this._canvasCount = 0;
+};
 
 p._setContext = function (type) {
 	if(type === '2D') {
@@ -14,6 +19,7 @@ p._setContext = function (type) {
 };
 
 p.create = function () {
+	this._canvasCount++;
 	return sge.obj.callNew(this._Renderer, sge.util.argsToArray(arguments));
 };
 

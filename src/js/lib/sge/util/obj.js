@@ -16,9 +16,9 @@ sge.obj.typeOf = function (obj) {
 
 sge.obj.extend = function(out) {
 	var key,
-		obj,
-		copy,
-		type;
+		obj;
+		// copy,
+		// type;
 	out = out || {};
 	for (var i=1, len=arguments.length; i<len; i++) {
 		obj = arguments[i];

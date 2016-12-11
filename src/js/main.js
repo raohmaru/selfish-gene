@@ -8,7 +8,7 @@ function initGame(canvas) {
 	game = new sge.Game(canvas, app.cfg);
 	uiStats = new app.ui.Stats(document.getElementById('stats'), game);
 	uiAttrs = new app.ui.Attrs(document.getElementById('attrs'), app.cfg.geneAttrs);
-	game.renderer.getView().addEventListener('click', clickHandler, false);
+	game.renderer.getWorld().addEventListener('click', clickHandler, false);
 	game.start();
 }
 

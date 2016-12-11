@@ -3,11 +3,22 @@
 var currentGame,
 	p;
 
-(sge.Game = function(canvas, cfg) {
+sge.getGame = function() {
+	return currentGame;
+};
+
+sge.Game = function(canvas, cfg) {
 	currentGame = this;	
 	sge.util.sgn(this);
-	this.cfg = cfg;
-	this.renderer	 = new sge.grf.Renderer(cfg.renderer, canvas);
+	this.cfg = sge.obj.extend({}, cfg);
+	this.renderer	 = new sge.grf.Renderer({
+		context: cfg.renderer,
+		canvas : canvas,
+		size   : cfg.size
+	});
+	if(cfg.debug) {
+		this.renderer.addLayer('debug');
+	}
 	this.spriteMgr   = new sge.core.SpriteMgr();
 	this.beatMachine = new sge.core.Beat({debug:cfg.debug});
 	this.atlas	     = new sge.core.Atlas({
@@ -16,15 +27,10 @@ var currentGame,
 		updateEvery: cfg.atlasUpdate,
 		debug	   : cfg.debug
 	});
-}).prototype = p = new Object();
-
-sge.getGame = function() {
-	return currentGame;
 };
+p = sge.Game.prototype;
 
 p.start = function() {
-	window.addEventListener('resize', this.resizeWorld.bind(this), false);
-	this.resizeWorld();
 	this.runTime = 0;
 	this.beatMachine
 		.onBeat(this.frame.bind(this))
@@ -38,11 +44,6 @@ p.frame = function() {
 	this.renderer.drawSprites(this.spriteMgr.getAll(), true);
 	this.renderer.update();
 	this.emit(sge.event.FRAME);
-};
-
-p.resizeWorld = function() {
-	this.renderer.resize(window.innerWidth, window.innerHeight);
-	this.emit(sge.event.WORLD_RESIZE, window.innerWidth, window.innerHeight);
 };
 
 }(window.sge || (window.sge = {})));

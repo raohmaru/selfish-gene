@@ -3,7 +3,10 @@
 app.cfg = {
 	debug: true,
 	renderer: '2D',
-	canvasColor: '#c2dcfc',
+	size: sge.cnst.FILL_WINDOW,
+	width: '100%',
+	height: '100%',
+	// canvasColor: '#c2dcfc',
 	fps: 60,
 	atlasSectorSize:50,
 	atlasUpdate:30,

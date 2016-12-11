@@ -10,6 +10,7 @@ var p;
 
 p._init = function(){
 	this._renList = {};
+	this._canvasCount = 0;
 };
 
 p.get = function(width, height, id){
@@ -18,6 +19,7 @@ p.get = function(width, height, id){
 	if(!this._renList[name]) {
 		r = new this._renderer(null, width, height);
 		this._renList[name] = r;
+		this._canvasCount++;
 	}
 	return this._renList[name];
 };

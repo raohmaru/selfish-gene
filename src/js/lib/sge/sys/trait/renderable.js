@@ -7,20 +7,22 @@ var defaults = {
 		height: 32
 	};
 
-sge.sys.trait.Renderable = function(gene) {
-	gene._baseAttrs = sge.obj.extend({}, defaults, gene._baseAttrs);
-	sge.obj.extend(gene, {	
+sge.sys.trait.Renderable = function(obj) {
+	obj._baseAttrs = sge.obj.extend({}, defaults, obj._baseAttrs);
+	sge.obj.extend(obj, {	
 		age	      : 0,
-		x		  : gene._baseAttrs.x,
-		y		  : gene._baseAttrs.y,
-		width	  : gene._baseAttrs.width,
-		height	  : gene._baseAttrs.height,
+		x		  : obj._baseAttrs.x,
+		y		  : obj._baseAttrs.y,
+		width	  : obj._baseAttrs.width,
+		height	  : obj._baseAttrs.height,
 		frame	  : frame,
 		createView: createView,
 		getView   : getView,
+		getCanvas : getCanvas,
 		resize	  : resize
 	});
-	gene.on(sge.event.SPRITE_DESTROY, destroy);
+	obj.on(sge.event.SPRITE_DESTROY, destroy);
+	// obj.createView();
 }
 
 var frame = function(){
@@ -37,10 +39,11 @@ var createView = function(id) {
 };
 
 var getView = function() {
-	if(!this._view) {
-		this.createView();
-	}
-	return this._view.getView();
+	return this._view;
+};
+
+var getCanvas = function() {
+	return this._view.getCanvas();
 };
 
 var resize = function(width, height, id) {

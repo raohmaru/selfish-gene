@@ -17,37 +17,35 @@ sge.obj.extend(Class.prototype, {
 		this._atlas = [];
 		this._core
 			.on(sge.event.WORLD_RESIZE,  this._worldResize,	this)
-			.on(sge.event.PREPARE_FRAME, this._reset,		  this)
-			.on(sge.event.SPRITE_ADDED,  this._onSpriteAdded,  this)
-			.on(sge.event.SPRITE_RENDER, this._onSpriteUpdate, this);
+			.on(sge.event.FRAME,         this._frame,		  this)
+			.on(sge.event.SPRITE_ADDED,  this._onSpriteAdded,  this);
 		if(this._options.debug) {
 			this._view = this._core.renderer.factory.create();
-			this._core.on(sge.event.PREPARE_FRAME, this._frame, this);
 		}
+		this._worldResize(null, this._core.renderer.getWorld().width, this._core.renderer.getWorld().height);
 	},
 
-	_reset: function(e){
+	_frame: function(e){
 		if(this._core.runTime % this._options.updateEvery === 0) {
 			this._atlas.length = 0;
+			this._core.spriteMgr.getAll().forEach(this._onSpriteUpdate.bind(this));
 		}
 	},
 
 	_onSpriteAdded: function(e, sprite){;
-		this._onSpriteUpdate(null, sprite, true);
+		this._onSpriteUpdate(sprite);
 	},
 
-	_onSpriteUpdate: function(e, sprite, force){;
-		if(force || this._core.runTime % this._options.updateEvery === 0) {
-			var sector = this.getSectorAt(sprite.x, sprite.y);
-			if(sector) {
-				if(!this._atlas[sector[0]]) {
-					this._atlas[sector[0]] = [];
-				}
-				if(!this._atlas[sector[0]][sector[1]]) {
-					this._atlas[sector[0]][sector[1]] = [];
-				}
-				this._atlas[sector[0]][sector[1]].push(sprite.id);
+	_onSpriteUpdate: function(sprite){;
+		var sector = this.getSectorAt(sprite.x, sprite.y);
+		if(sector) {
+			if(!this._atlas[sector[0]]) {
+				this._atlas[sector[0]] = [];
 			}
+			if(!this._atlas[sector[0]][sector[1]]) {
+				this._atlas[sector[0]][sector[1]] = [];
+			}
+			this._atlas[sector[0]][sector[1]].push(sprite.id);
 		}
 	},
 
@@ -70,12 +68,9 @@ sge.obj.extend(Class.prototype, {
 				n = this._vSectorSize * i;
 				path.push([0, n, w, n]);
 			}
-			this._view.drawPoly(path, '#FFFFFF', 1);
+			this._view.drawPoly(path, '#FFFFFF', 1);			
+			this._core.renderer.get('debug').drawImage(this._view.getCanvas(), 0, 0);
 		}
-	},
-
-	_frame: function(e) {
-		this._core.renderer.get().drawImage(this._view.getView(), 0, 0);
 	},
 
 	getSectorAt: function(x, y, restrictToWorld) {
