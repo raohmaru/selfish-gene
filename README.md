@@ -5,7 +5,7 @@ Currently it is written in [vanilla JavaScript](http://vanilla-js.com/) and only
 [HTML5 Canvas API](https://developer.mozilla.org/en-US/docs/Web/API/Canvas_API) as renderer.
 
 ## Getting Started
-Just clone the repository and deep into the code.
+Simply clone the repository and go deep into the code.
 
 The engine is in alpha status, which means that it may contain bugs, be unstable and the API may change without notice as a result of product updates.
 
