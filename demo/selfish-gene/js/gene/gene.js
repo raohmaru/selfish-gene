@@ -33,7 +33,7 @@ sge.obj.extend(Class.prototype, {
 });
 
 var frame = function(){
-	if(this.age % this._baseAttrs.cloneEvery === 0) {
+	if(this.age % this._baseAttrs.cloneEvery === 0 && this._core.spriteMgr.getSize() < app.cfg.populationLimit) {
 		var clone = this.clone();
 		clone.x = this.x;
 		clone.y = this.y;

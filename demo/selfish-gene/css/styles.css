@@ -53,3 +53,18 @@ canvas {
 		font-weight: 700;
 		color: #fff;
 	}
+.info {
+	font-size: 24vw;
+	line-height: .8em;
+	color: #6db0e7;
+	transition: opacity .2s linear;
+}
+	.info--hidden {
+		opacity: 0;
+	}
+	
+@media only screen and (min-width: 480px) {
+	.info {
+		font-size: 6em;
+	}
+}

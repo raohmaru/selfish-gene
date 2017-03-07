@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+	<title>Selfish Gene | SGE Demo</title>
+	<meta name="viewport" content="width=device-width">
+	<meta name="description" content="" />
+	<link rel="stylesheet" href="css/styles.css" />
+</head>
+<body>
+	<canvas class="world" id="maincanvas" width="1" height="1">
+		Your browser doesn't support the canvas element <strong>:(</strong>
+	</canvas>
+	<div class="stats" id="stats">
+		Population: <span class="stats__population">0</span><br>
+		FPS: <span class="stats__fps">0</span><br>
+		Size: <span class="stats__size"></span>
+	</div>
+	<div class="attrs" id="attrs"></div>
+	<div class="info" id="info">Click on the screen to create a gene</div>
+		
+	<script src="../../lib/util/rnd.js"></script>
+	<script src="../../lib/util/sgn.js"></script>
+	<script src="../../lib/util/obj.js"></script>
+	<script src="../../lib/util/mth.js"></script>
+	<script src="../../lib/util/pool.js"></script>
+	<script src="../../lib/const.js"></script>
+	<script src="../../lib/sys/gobj.js"></script>
+	<script src="../../lib/sys/entity.js"></script>
+	<script src="../../lib/sys/sprite.js"></script>
+	<script src="../../lib/sys/trait/renderable.js"></script>
+	<script src="../../lib/sys/trait/destroyabe.js"></script>
+	<script src="../../lib/sys/trait/solid.js"></script>
+	<script src="../../lib/core.js"></script>
+	<script src="../../lib/core/beat.js"></script>
+	<script src="../../lib/core/atlas.js"></script>
+	<script src="../../lib/core/spriteMgr.js"></script>
+	<script src="../../lib/grf/rend.js"></script>
+	<script src="../../lib/grf/factory.js"></script>
+	<script src="../../lib/grf/canvas.js"></script>
+	<script src="../../lib/grf/shared.js"></script>
+	
+	<script src="js/cfg.js"></script>
+	<script src="js/gene/gene.js"></script>
+	<script src="js/gene/geneFactory.js"></script>
+	<script src="js/gene/trait/movable.js"></script>
+	<script src="js/gene/trait/basic.js"></script>
+	<script src="js/gene/trait/ally.js"></script>
+	<script src="js/gene/trait/killer.js"></script>
+	<script src="js/ui/stats.js"></script>
+	<script src="js/ui/attrs.js"></script>
+	<script src="js/ui/info.js"></script>
+	<script src="js/main.js"></script>
+</body>
+</html>

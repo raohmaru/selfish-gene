@@ -16,7 +16,8 @@ app.cfg = {
 		// {name:'Dodger',   color:'#49A1FF'},
 		// {name:'Defender', color:'#FABB2C'},
 		{name:'Killer',  color:'#DD0000'}
-	]
+	],
+	populationLimit: 4096
 }
 
 }(window.app || (window.app = {})));
