@@ -28,7 +28,7 @@ sge.obj.extend(Class.prototype, {
 	repaint: function() {
 		if(this._view.isEmpty()) {
 			this._view.drawRect(0, 0, this.width, this.height, this._baseAttrs.color);
-		}		
+		}
 	}
 });
 

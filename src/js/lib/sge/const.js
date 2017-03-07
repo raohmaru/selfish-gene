@@ -3,7 +3,7 @@
 sge.obj.extend(sge, {
 	event: {
 		PREPARE_FRAME:  'prepareFrame',
-		FRAME:		  'frame',
+		FRAME:		  	'frame',
 		SPRITE_RENDER:  'spriteRender',
 		SPRITE_ADDED:   'spriteAdded',
 		SPRITE_CLONE:   'spriteClone',

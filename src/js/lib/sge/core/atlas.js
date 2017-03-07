@@ -16,8 +16,8 @@ sge.obj.extend(Class.prototype, {
 	init: function(){
 		this._atlas = [];
 		this._core
-			.on(sge.event.WORLD_RESIZE,  this._worldResize,	this)
-			.on(sge.event.FRAME,         this._frame,		  this)
+			.on(sge.event.WORLD_RESIZE,  this._worldResize,	   this)
+			.on(sge.event.FRAME,         this._frame,		   this)
 			.on(sge.event.SPRITE_ADDED,  this._onSpriteAdded,  this);
 		if(this._options.debug) {
 			this._view = this._core.renderer.factory.create();
