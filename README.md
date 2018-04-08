@@ -10,7 +10,7 @@ Simply clone the repository and go deep into the code.
 The engine is in alpha status, which means that it may contain bugs, be unstable and the API may change without notice as a result of product updates.
 
 ## Examples
-Open demo/selfish-gene/index.html in your favourite browser, or navigate to https://raohmaru.github.io/demo/selfish-gene/index.html.
+Open demo/selfish-gene/index.html in your favourite browser, or navigate to https://raohmaru.github.io/sge/demo/selfish-gene/index.html.
 
 ## Browser Support
 SGE supports IE 10+, Edge, Firefox 15+, Chrome 20+, Safari 8+.
